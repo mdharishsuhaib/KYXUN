@@ -1,0 +1,13 @@
+
+██╗  ██╗██╗   ██╗██╗  ██╗██╗   ██╗███╗   ██╗
+██║ ██╔╝╚██╗ ██╔╝╚██╗██╔╝██║   ██║████╗  ██║
+█████╔╝  ╚████╔╝  ╚███╔╝ ██║   ██║██╔██╗ ██║
+██╔═██╗   ╚██╔╝   ██╔██╗ ██║   ██║██║╚██╗██║
+██║  ██╗   ██║   ██╔╝ ██╗╚██████╔╝██║ ╚████║
+╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+
+ AI-Powered Academic Management Platform
+ Version: ${spring.application.version:1.0.0}
+ Spring Boot: ${spring-boot.version}
+ Java: ${java.version}
+ Profile: ${spring.profiles.active:default}

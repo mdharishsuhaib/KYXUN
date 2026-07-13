@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:kyxun_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  # No-op cache manager — RedisConfig is skipped via @ConditionalOnProperty
+  cache:
+    type: none
+
+  # Exclude Redis auto-configuration in tests
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+  # Dummy mail config to prevent JavaMailSender bean failure
+  mail:
+    host: localhost
+    port: 3025
+    username: test@kyxun.com
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+  ai:
+    vertex:
+      ai:
+        gemini:
+          project-id: mock-project-id
+          location: us-central1
+
+# JWT config required by JWTService @Value bindings
+jwt:
+  secret: S3N0cmluZ0Jhc2U2NEVuY29kZWRTZWNyZXRLZXlGb3JLeXh1bkFJU3R1ZHlQbGFubmVyQXBwbGljYXRpb24yMDI2UHJvZA==
+  expiration: 86400000
+
+app:
+  frontend:
+    url: http://localhost:3000
+  file:
+    upload-dir: ${java.io.tmpdir}/kyxun-test-uploads

@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: kyxun-backend
+
+  profiles:
+    active: dev
+
+  jpa:
+    open-in-view: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+server:
+  port: 8080
+
+jwt:
+  secret: c3VwZXJTZWNyZXRLZXlGb3JLWXh1bjEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2
+  expiration: 86400000
+
+app:
+  file:
+    upload-dir: uploads/kyxun
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.kyxun: DEBUG
+    org.springframework.security: WARN
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{requestId}] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+  info:
+    title: Kyxun API
+    description: AI-powered Academic Management Platform
+    version: 1.0.0

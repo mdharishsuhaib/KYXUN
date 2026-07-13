@@ -1,0 +1,488 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   KYXUN PREMIUM SYSTEM (Linear / Vercel / Stripe / Perplexity inspired)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Workspace sidebar width (JS sets this dynamically via Sidebar component) */
+:root {
+  --sidebar-w: 260px;
+}
+
+:root,
+[data-theme="light"] {
+  --kyxun-bg: #f5f5fa;
+  --kyxun-bg-secondary: #ebebf2;
+  --kyxun-surface: #ffffff;
+  --kyxun-surface-hover: #fafafd;
+  
+  --kyxun-border: rgba(0, 0, 0, 0.12);
+  --kyxun-border-soft: rgba(0, 0, 0, 0.06);
+  --kyxun-border-glow: rgba(79, 70, 229, 0.2);
+  
+  --kyxun-text: #334155;
+  --kyxun-text-muted: #64748b;
+  --kyxun-text-subtle: #94a3b8;
+
+  /* Badges & Labels - high contrast in light mode */
+  --kyxun-badge-indigo-text: #3730a3;
+  --kyxun-badge-indigo-bg: #e0e7ff;
+  --kyxun-badge-indigo-border: #c7d2fe;
+
+  --kyxun-badge-purple-text: #581c87;
+  --kyxun-badge-purple-bg: #f3e8ff;
+  --kyxun-badge-purple-border: #e9d5ff;
+
+  --kyxun-badge-rose-text: #9f1239;
+  --kyxun-badge-rose-bg: #ffe4e6;
+  --kyxun-badge-rose-border: #fecdd3;
+
+  --kyxun-badge-cyan-text: #155e75;
+  --kyxun-badge-cyan-bg: #ecfeff;
+  --kyxun-badge-cyan-border: #cffafe;
+
+  --kyxun-badge-amber-text: #9a3412;
+  --kyxun-badge-amber-bg: #ffedd5;
+  --kyxun-badge-amber-border: #fed7aa;
+  
+  --kyxun-accent: #84cc16; /* Lime 500 */
+  --kyxun-accent-hover: #65a30d; /* Lime 600 */
+  --kyxun-accent-secondary: #a3e635; /* Lime 400 */
+  --kyxun-accent-tertiary: #0891b2;
+  --kyxun-brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
+
+  --kyxun-avatar-gradient: linear-gradient(135deg, #7c3aed, #0891b2);
+  --kyxun-input-bg: rgba(0, 0, 0, 0.03);
+  --kyxun-input-border: rgba(0, 0, 0, 0.12);
+  --kyxun-input-focus: rgba(124, 58, 237, 0.4);
+  
+  --kyxun-glass: rgba(255, 255, 255, 0.92);
+  --kyxun-glass-border: rgba(0, 0, 0, 0.12);
+  --kyxun-glass-glow: rgba(0, 0, 0, 0.02);
+  
+  --kyxun-tag-bg: rgba(0, 0, 0, 0.08);
+  --kyxun-hover-bg: rgba(0, 0, 0, 0.08);
+  --kyxun-btn-submit-bg: linear-gradient(135deg, #4f46e5, #7c3aed);
+  --kyxun-btn-submit-text: #ffffff;
+  
+  --kyxun-danger: #e11d48;
+  --kyxun-success: #059669;
+  --kyxun-warning: #d97706;
+  --kyxun-info: #0891b2;
+  
+  /* Dashboard Card Colors */
+  --kyxun-card-indigo-bg: #e0e7ff;
+  --kyxun-card-indigo-border: #c7d2fe;
+  --kyxun-card-amber-bg: #ffedd5;
+  --kyxun-card-amber-border: #fed7aa;
+  --kyxun-card-purple-bg: #e9d5ff; /* Slightly darker purple for better visibility */
+  --kyxun-card-purple-border: #d8b4fe;
+  --kyxun-card-emerald-bg: #d1fae5;
+  --kyxun-card-emerald-border: #a7f3d0;
+}
+
+[data-theme="dark"] {
+  --kyxun-bg: #020204;
+  --kyxun-bg-secondary: #06060c;
+  --kyxun-surface: #0a0a14;
+  --kyxun-surface-hover: #101022;
+  
+  /* Borders - highly visible overlays */
+  --kyxun-border: rgba(255, 255, 255, 0.12);
+  --kyxun-border-soft: rgba(255, 255, 255, 0.06);
+  --kyxun-border-glow: rgba(168, 85, 247, 0.35);
+  
+  /* Typography - elevated contrast for projector viewing */
+  --kyxun-text: #ffffff;
+  --kyxun-text-muted: #e2e8f0;
+  --kyxun-text-subtle: #94a3b8;
+
+  /* Badges & Labels - high contrast in dark mode */
+  --kyxun-badge-indigo-text: #c7d2fe;
+  --kyxun-badge-indigo-bg: rgba(99, 102, 241, 0.18);
+  --kyxun-badge-indigo-border: rgba(99, 102, 241, 0.4);
+
+  --kyxun-badge-purple-text: #e9d5ff;
+  --kyxun-badge-purple-bg: rgba(168, 85, 247, 0.18);
+  --kyxun-badge-purple-border: rgba(168, 85, 247, 0.4);
+
+  --kyxun-badge-rose-text: #fecdd3;
+  --kyxun-badge-rose-bg: rgba(244, 63, 94, 0.18);
+  --kyxun-badge-rose-border: rgba(244, 63, 94, 0.4);
+
+  --kyxun-badge-cyan-text: #cffafe;
+  --kyxun-badge-cyan-bg: rgba(6, 182, 212, 0.18);
+  --kyxun-badge-cyan-border: rgba(6, 182, 212, 0.4);
+
+  --kyxun-badge-amber-text: #fef3c7;
+  --kyxun-badge-amber-bg: rgba(245, 158, 11, 0.18);
+  --kyxun-badge-amber-border: rgba(245, 158, 11, 0.4);
+  
+  /* Aurora Accents (Indigo to Violet to Cyan) */
+  --kyxun-accent: #a3e635; /* Lime 400 */
+  --kyxun-accent-hover: #84cc16; /* Lime 500 */
+  --kyxun-accent-secondary: #d9f99d; /* Lime 200 */
+  --kyxun-accent-tertiary: #06b6d4; /* Cyan */
+  --kyxun-brand-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+
+  /* UI Components */
+  --kyxun-avatar-gradient: linear-gradient(135deg, #a855f7, #06b6d4);
+  --kyxun-input-bg: rgba(255, 255, 255, 0.03);
+  --kyxun-input-border: rgba(255, 255, 255, 0.12);
+  --kyxun-input-focus: rgba(168, 85, 247, 0.5);
+  
+  /* Glassmorphism - thicker density for readability */
+  --kyxun-glass: rgba(8, 8, 16, 0.88);
+  --kyxun-glass-border: rgba(255, 255, 255, 0.12);
+  --kyxun-glass-glow: rgba(255, 255, 255, 0.03);
+  
+  --kyxun-tag-bg: rgba(255, 255, 255, 0.08);
+  --kyxun-hover-bg: rgba(255, 255, 255, 0.06);
+  --kyxun-btn-submit-bg: linear-gradient(135deg, #6366f1, #a855f7);
+  --kyxun-btn-submit-text: #ffffff;
+  
+  /* Semantics */
+  --kyxun-danger: #f43f5e;
+  --kyxun-success: #10b981;
+  --kyxun-warning: #f59e0b;
+  --kyxun-info: #06b6d4;
+
+  /* Dashboard Card Colors */
+  --kyxun-card-indigo-bg: rgba(99, 102, 241, 0.15);
+  --kyxun-card-indigo-border: rgba(99, 102, 241, 0.4);
+  --kyxun-card-amber-bg: rgba(245, 158, 11, 0.15);
+  --kyxun-card-amber-border: rgba(245, 158, 11, 0.4);
+  --kyxun-card-purple-bg: rgba(168, 85, 247, 0.15);
+  --kyxun-card-purple-border: rgba(168, 85, 247, 0.4);
+  --kyxun-card-emerald-bg: rgba(16, 185, 129, 0.15);
+  --kyxun-card-emerald-border: rgba(16, 185, 129, 0.4);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BASE & RESET
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { height: 100%; scroll-behavior: smooth; }
+
+body {
+  min-height: 100%;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--kyxun-bg);
+  color: var(--kyxun-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   UTILITY & GLASS CLASSES
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.font-outfit { font-family: "Outfit", sans-serif; }
+
+.kyxun-page    { background: var(--kyxun-bg); }
+.kyxun-text    { color: var(--kyxun-text); }
+.kyxun-text-muted   { color: var(--kyxun-text-muted); }
+.kyxun-text-subtle  { color: var(--kyxun-text-subtle); }
+.kyxun-border  { border-color: var(--kyxun-border); }
+.kyxun-hover   { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+.kyxun-hover:hover { background: var(--kyxun-hover-bg); transform: translateY(-1px); }
+
+.kyxun-header {
+  background: color-mix(in srgb, var(--kyxun-bg) 88%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.kyxun-badge-indigo { background-color: var(--kyxun-badge-indigo-bg) !important; color: var(--kyxun-badge-indigo-text) !important; border-color: var(--kyxun-badge-indigo-border) !important; }
+.kyxun-badge-purple { background-color: var(--kyxun-badge-purple-bg) !important; color: var(--kyxun-badge-purple-text) !important; border-color: var(--kyxun-badge-purple-border) !important; }
+.kyxun-badge-rose { background-color: var(--kyxun-badge-rose-bg) !important; color: var(--kyxun-badge-rose-text) !important; border-color: var(--kyxun-badge-rose-border) !important; }
+.kyxun-badge-cyan { background-color: var(--kyxun-badge-cyan-bg) !important; color: var(--kyxun-badge-cyan-text) !important; border-color: var(--kyxun-badge-cyan-border) !important; }
+.kyxun-badge-amber { background-color: var(--kyxun-badge-amber-bg) !important; color: var(--kyxun-badge-amber-text) !important; border-color: var(--kyxun-badge-amber-border) !important; }
+
+.glass-panel {
+  background: var(--kyxun-glass);
+  border: 1px solid var(--kyxun-glass-border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.22), 0 0 25px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .glass-panel {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.glass-panel-glow {
+  position: relative;
+}
+.glass-panel-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.04) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--kyxun-input-border);
+  background: var(--kyxun-input-bg);
+  color: var(--kyxun-text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.input-field::placeholder { color: var(--kyxun-text-subtle); }
+.input-field:focus {
+  border-color: var(--kyxun-accent);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kyxun-accent) 20%, transparent), 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   3D CARD FLIP EFFECTS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS & AURORA EFFECTS (Hackathon wow-factor)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.animate-blink { animation: blink 1s step-end infinite; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.2s infinite;
+}
+
+/* Rotating backgrounds */
+@keyframes spin-slow {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-aurora-spin {
+  animation: spin-slow 25s linear infinite;
+}
+
+/* 3D Orb float vectors */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-16px); }
+}
+.animate-float {
+  animation: float-y 5s ease-in-out infinite;
+}
+
+@keyframes float-y-reverse {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(16px); }
+}
+.animate-float-reverse {
+  animation: float-y-reverse 6s ease-in-out infinite;
+}
+
+/* Orbiting card animations in Hero section */
+@keyframes orbit-1 {
+  0%, 100% { transform: translate(0px, 0px) rotate(4deg); }
+  50%      { transform: translate(12px, -18px) rotate(5deg); }
+}
+.animate-orbit-1 { animation: orbit-1 7s ease-in-out infinite; }
+
+@keyframes orbit-2 {
+  0%, 100% { transform: translate(0px, 0px) rotate(-3deg); }
+  50%      { transform: translate(-16px, 12px) rotate(-4deg); }
+}
+.animate-orbit-2 { animation: orbit-2 8s ease-in-out infinite; }
+
+@keyframes orbit-3 {
+  0%, 100% { transform: translate(0px, 0px) rotate(2deg); }
+  50%      { transform: translate(14px, 14px) rotate(0deg); }
+}
+.animate-orbit-3 { animation: orbit-3 6s ease-in-out infinite; }
+
+@keyframes orbit-4 {
+  0%, 100% { transform: translate(0px, 0px) rotate(-5deg); }
+  50%      { transform: translate(-10px, -14px) rotate(-6deg); }
+}
+.animate-orbit-4 { animation: orbit-4 9s ease-in-out infinite; }
+
+/* Bouncing audio bars */
+@keyframes audio-wave {
+  0%, 100% { height: 8px; }
+  50%      { height: 26px; }
+}
+.audio-bar {
+  animation: audio-wave 1s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY & SCROLLBAR
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.skip-nav {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--kyxun-accent);
+  color: #fff;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+.skip-nav:focus { top: 0; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+@media print {
+  .kyxun-header, button, .skip-nav { display: none !important; }
+  body { background: #fff; color: #000; }
+}
+
+/* Custom OCR Laser scanner animation */
+@keyframes scan-laser {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: calc(100% - 55px); opacity: 0; }
+}
+.animate-laser {
+  animation: scan-laser 3s linear infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SLIDER STYLES — M4 FIX: Visual drag affordance
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.kyxun-slider {
+  background: var(--kyxun-border);
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.kyxun-slider:hover {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kyxun-accent) 20%, transparent);
+}
+
+.kyxun-slider:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kyxun-accent) 35%, transparent);
+}
+
+/* Webkit thumb styling */
+.kyxun-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--kyxun-accent);
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--kyxun-accent) 50%, transparent);
+  cursor: grab;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.kyxun-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--kyxun-accent) 70%, transparent);
+}
+
+.kyxun-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+/* Firefox thumb styling */
+.kyxun-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--kyxun-accent);
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--kyxun-accent) 50%, transparent);
+  cursor: grab;
+  transition: transform 0.15s;
+}
+
+.kyxun-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Light mode slider track */
+[data-theme="light"] .kyxun-slider {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE UTILITIES
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .glass-panel-hover:hover {
+    transform: none; /* Disable hover lift on touch devices */
+  }
+}

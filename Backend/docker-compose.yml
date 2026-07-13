@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+
+  # ─── PostgreSQL ───────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: kyxun-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kyxun_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Kyxun@123
+    ports:
+      - "5432:5432"
+    volumes:
+      - kyxun_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kyxun_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kyxun-network
+
+  # ─── Redis ────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: kyxun-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - kyxun_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kyxun-network
+
+  # ─── Kyxun Backend ────────────────────────────────
+  kyxun-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kyxun-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/kyxun_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: Kyxun@123
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET}
+      GMAIL_USERNAME: ${GMAIL_USERNAME}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+      VERTEX_PROJECT_ID: ${VERTEX_PROJECT_ID}
+      VERTEX_LOCATION: ${VERTEX_LOCATION:-us-central1}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      FILE_UPLOAD_DIR: /var/kyxun/uploads
+    ports:
+      - "8080:8080"
+    volumes:
+      - kyxun_uploads:/var/kyxun/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - kyxun-network
+
+volumes:
+  kyxun_pg_data:
+    driver: local
+  kyxun_redis_data:
+    driver: local
+  kyxun_uploads:
+    driver: local
+
+networks:
+  kyxun-network:
+    driver: bridge
