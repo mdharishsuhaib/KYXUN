@@ -1,50 +1,33 @@
-# ──────────────────────────────────────────────
-# Stage 1: Build
-# ──────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk-alpine AS builder
+# ---------- Build Stage ----------
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml first for dependency caching
-COPY mvnw pom.xml ./
-COPY .mvn .mvn
+COPY pom.xml .
 
-# Download dependencies (cached unless pom.xml changes)
-RUN ./mvnw dependency:go-offline -B
+RUN mvn dependency:go-offline
 
-# Copy source and build
 COPY src ./src
-RUN ./mvnw clean package -DskipTests -B
 
-# ──────────────────────────────────────────────
-# Stage 2: Runtime
-# ──────────────────────────────────────────────
-FROM eclipse-temurin:21-jre-alpine AS runtime
+RUN mvn clean package -DskipTests
 
-# Security: run as non-root user
+# ---------- Runtime Stage ----------
+FROM eclipse-temurin:21-jre-alpine
+
 RUN addgroup -S kyxun && adduser -S kyxun -G kyxun
 
 WORKDIR /app
 
-# Create upload directory and set ownership
-RUN mkdir -p /var/kyxun/uploads && chown -R kyxun:kyxun /var/kyxun
+COPY --from=builder /app/target/*.jar app.jar
 
-# Copy the built jar from builder stage
-COPY --from=builder /app/target/kyxun-backend-*.jar app.jar
-
-# Set ownership
-RUN chown kyxun:kyxun app.jar
+RUN mkdir -p /var/kyxun/uploads && \
+    chown -R kyxun:kyxun /var/kyxun && \
+    chown kyxun:kyxun app.jar
 
 USER kyxun
 
-# Expose application port
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
 EXPOSE 8080
 
-# JVM optimizations for containers
-ENV JAVA_OPTS="-XX:+UseContainerSupport \
-               -XX:MaxRAMPercentage=75.0 \
-               -XX:+UseG1GC \
-               -XX:+OptimizeStringConcat \
-               -Djava.security.egd=file:/dev/./urandom"
-
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"]
