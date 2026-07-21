@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Scratch / debug files - do not commit
+*.bak
+*_backup.*
+diff_output.txt
+last_tool_call.json
+extracted*.json
+page_*_edits.json
+page_*_writes.json
