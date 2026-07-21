@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 import path from "path";
 
-const nextConfig: NextConfig = {
-  distDir: ".next-build",
-};
-
+const nextConfig: NextConfig = {};
 export default nextConfig;
 
 import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());
