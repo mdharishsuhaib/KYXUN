@@ -617,11 +617,7 @@ export default function HomePage() {
             © 2026 Kyxun Pvt Ltd. All rights reserved.
           </p>
           
-          {/* Green dot wrapped in a clear badge so it doesn't look like a random dot */}
-          <div className="flex lg:absolute lg:right-0 lg:top-8 items-center gap-2.5 px-4 py-2 rounded-full bg-[var(--kyxun-input-bg)] border border-[var(--kyxun-border)] shadow-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]" />
-            <span className="text-[10px] font-mono font-black text-[var(--kyxun-text)] uppercase tracking-widest">System Operational</span>
-          </div>
+
         </div>
         </div>
       </footer>
