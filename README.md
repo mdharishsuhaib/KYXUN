@@ -4,6 +4,8 @@
 
 **Full-Stack AI-Powered Academic Planning Platform**
 
+🚀 **Live Project:** [https://kyxun.mdharishsuhaib.workers.dev](https://kyxun.mdharishsuhaib.workers.dev)
+
 ⭐ Star us on GitHub · 🐛 Report Bug · ✨ Request Feature
 
 ---
