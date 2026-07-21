@@ -4,7 +4,7 @@
 
 **Full-Stack AI-Powered Academic Planning Platform**
 
-<img src="logo.png" width="20" height="20" alt="Kyxun Logo" align="center"> &nbsp;Kyxun: [https://kyxun.mdharishsuhaib.workers.dev](https://kyxun.mdharishsuhaib.workers.dev)
+<a><img src="logo.png" width="20" height="20" alt="Kyxun Logo" align="center"></a> &nbsp;Kyxun: [https://kyxun.mdharishsuhaib.workers.dev](https://kyxun.mdharishsuhaib.workers.dev)
 
 ⭐ Star us on GitHub · 🐛 Report Bug · ✨ Request Feature
 
