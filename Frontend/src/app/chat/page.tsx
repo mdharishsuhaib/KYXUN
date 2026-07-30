@@ -419,7 +419,7 @@ const MessageList = memo(function MessageList({
     return (
       <div className="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto my-auto py-12">
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
-          <img src="/logo_white_icon.png" alt="Kyxun Logo" className="w-full h-full object-cover" />
+          <img src="/logo_white_icon.webp" alt="Kyxun Logo" className="w-full h-full object-cover" />
         </div>
         <div>
           <h1 className="font-outfit text-3xl font-black kyxun-text tracking-tight">Ask Kyxun AI</h1>

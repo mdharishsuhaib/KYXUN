@@ -77,12 +77,12 @@ export default function HomePage() {
           <div className="flex items-center gap-2.5 shrink-0">
             <div className="w-9 h-9 drop-shadow-md dark:drop-shadow-[0_0_15px_rgba(163,230,53,0.65)]">
               <img 
-                src="/logo_white_icon.png" 
+                src="/logo_white_icon.webp" 
                 alt="Kyxun Logo" 
                 className="w-full h-full object-contain dark:hidden" 
               />
               <img 
-                src="/logo_white_icon.png" 
+                src="/logo_white_icon.webp" 
                 alt="Kyxun Logo" 
                 className="w-full h-full object-contain hidden dark:block" 
               />
@@ -568,12 +568,12 @@ export default function HomePage() {
             <div className="flex items-center gap-2 mb-5">
               <div className="w-8 h-8 drop-shadow-md dark:drop-shadow-[0_0_15px_rgba(163,230,53,0.65)] shrink-0">
                 <img 
-                  src="/logo_white_icon.png" 
+                  src="/logo_white_icon.webp" 
                   alt="Kyxun Logo" 
                   className="w-full h-full object-contain dark:hidden" 
                 />
                 <img 
-                  src="/logo_white_icon.png" 
+                  src="/logo_white_icon.webp" 
                   alt="Kyxun Logo" 
                   className="w-full h-full object-contain hidden dark:block" 
                 />

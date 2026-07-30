@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Transform student panic into a structured, AI-generated survival plan. Upload your syllabus and get a personalised study plan in under 2 minutes.",
   keywords: ["study planner", "AI exam help", "student survival", "kyxun"],
   icons: {
-    icon: "/logo_white_icon.png",
+    icon: "/logo_white_icon.webp",
   },
   openGraph: {
     title: "Kyxun",

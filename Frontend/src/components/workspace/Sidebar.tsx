@@ -146,12 +146,12 @@ export default function Sidebar() {
         <div className="flex items-center gap-2.5 cursor-default">
           <div className="w-8 h-8 flex items-center justify-center shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_12px_rgba(163,230,53,0.65)]">
             <img 
-              src="/logo_white_icon.png" 
+              src="/logo_white_icon.webp" 
               alt="Kyxun Logo" 
               className="w-full h-full object-contain dark:hidden" 
             />
             <img 
-              src="/logo_white_icon.png" 
+              src="/logo_white_icon.webp" 
               alt="Kyxun Logo" 
               className="w-full h-full object-contain hidden dark:block" 
             />

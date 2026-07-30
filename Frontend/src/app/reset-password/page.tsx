@@ -112,12 +112,12 @@ function ResetPasswordContent() {
         <div className="flex items-center justify-center gap-2.5 mb-10 group cursor-default">
           <div className="w-12 h-12 flex items-center justify-center group-hover:scale-110 transition-transform drop-shadow-md dark:drop-shadow-[0_0_20px_rgba(163,230,53,0.7)]">
             <img 
-              src="/logo_white_icon.png" 
+              src="/logo_white_icon.webp" 
               alt="Kyxun Logo" 
               className="w-full h-full object-contain dark:hidden" 
             />
             <img 
-              src="/logo_white_icon.png" 
+              src="/logo_white_icon.webp" 
               alt="Kyxun Logo" 
               className="w-full h-full object-contain hidden dark:block" 
             />
