@@ -36,6 +36,13 @@ public class AuthenticationController {
                 authenticationService.login(request));
     }
 
+    @PostMapping("/google")
+    public ApiResponse<AuthenticationResponse> googleLogin(
+            @Valid @RequestBody com.kyxun.authentication.dto.request.GoogleLoginRequest request) {
+        return ApiResponseBuilder.success("Google login successful",
+                authenticationService.googleLogin(request));
+    }
+
     @PostMapping("/refresh")
     public ApiResponse<AuthenticationResponse> refreshToken(
             @Valid @RequestBody RefreshTokenRequest request) {

@@ -114,6 +114,62 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    @org.springframework.beans.factory.annotation.Value("${google.clientId:}")
+    private String googleClientId;
+
+    @Override
+    @Transactional
+    public AuthenticationResponse googleLogin(com.kyxun.authentication.dto.request.GoogleLoginRequest request) {
+        try {
+            com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier verifier = 
+                new com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.Builder(
+                    new com.google.api.client.http.javanet.NetHttpTransport(),
+                    new com.google.api.client.json.gson.GsonFactory())
+                .setAudience(java.util.Collections.singletonList(googleClientId))
+                .build();
+
+            com.google.api.client.googleapis.auth.oauth2.GoogleIdToken idToken = verifier.verify(request.getIdToken());
+            if (idToken == null) {
+                throw new UnauthorizedException("Invalid Google ID token");
+            }
+
+            com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+
+            User user = userRepository.findByEmail(email).orElseGet(() -> {
+                User newUser = User.builder()
+                        .firstName((String) payload.get("given_name"))
+                        .lastName((String) payload.get("family_name"))
+                        .email(email)
+                        .authProvider("GOOGLE")
+                        .profilePictureUrl((String) payload.get("picture"))
+                        .role(Role.STUDENT)
+                        .accountEnabled(true)
+                        .emailVerified(true)
+                        .build();
+                return userRepository.save(newUser);
+            });
+
+            String accessToken = jwtService.generateToken(user);
+            String refreshToken = UUID.randomUUID().toString();
+            user.setRefreshToken(refreshToken);
+            userRepository.save(user);
+
+            return AuthenticationResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .tokenType("Bearer")
+                    .expiresIn(86400L)
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .build();
+        } catch (Exception e) {
+            log.error("Google sign in failed", e);
+            throw new UnauthorizedException("Google authentication failed: " + e.getMessage());
+        }
+    }
+
     @Override
     @Transactional
     public AuthenticationResponse refreshToken(RefreshTokenRequest request) {

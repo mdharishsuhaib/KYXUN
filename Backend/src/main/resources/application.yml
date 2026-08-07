@@ -55,3 +55,6 @@ springdoc:
     title: Kyxun API
     description: AI-powered Academic Management Platform
     version: 1.0.0
+google:
+  clientId: ${GOOGLE_CLIENT_ID:}
+

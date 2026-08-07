@@ -35,7 +35,11 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "auth_provider", nullable = false, length = 50)
+    @Builder.Default
+    private String authProvider = "LOCAL";
+
+    @Column(name = "password")
     private String password;
 
     @Column(name = "profile_picture_url")

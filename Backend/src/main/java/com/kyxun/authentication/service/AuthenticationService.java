@@ -13,6 +13,8 @@ public interface AuthenticationService {
 
     AuthenticationResponse login(LoginRequest request);
 
+    AuthenticationResponse googleLogin(com.kyxun.authentication.dto.request.GoogleLoginRequest request);
+
     AuthenticationResponse refreshToken(RefreshTokenRequest request);
 
     void logout();

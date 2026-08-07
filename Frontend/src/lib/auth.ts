@@ -85,8 +85,24 @@ export async function loginUser(
   }
 }
 
-export async function signInWithGoogle(): Promise<{ ok: boolean; error?: string }> {
-  return { ok: false, error: "Google Sign-In is not currently supported by the backend." };
+export async function signInWithGoogle(credential: string): Promise<{ ok: boolean; session?: Session; error?: string }> {
+  try {
+    const response = await api.post<any>("/auth/google", {
+      idToken: credential,
+    });
+
+    const newSession: Session = {
+      email: response.email,
+      fullName: `${response.firstName} ${response.lastName}`.trim(),
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+    };
+    saveSession(newSession);
+
+    return { ok: true, session: newSession };
+  } catch (err: any) {
+    return { ok: false, error: err.message || "Google Sign-In failed." };
+  }
 }
 
 export async function updateProfile(
