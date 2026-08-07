@@ -199,6 +199,8 @@ export default function SignupPage() {
                 onError={() => {
                   setError("Google Sign-Up failed.");
                 }}
+                type="standard"
+                logo_alignment="left"
                 text="signup_with"
                 width="340"
               />

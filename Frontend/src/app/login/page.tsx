@@ -211,6 +211,8 @@ function LoginContent() {
                 onError={() => {
                   setError("Google Sign-In failed.");
                 }}
+                type="standard"
+                logo_alignment="left"
                 text="signin_with"
                 width="340"
               />
