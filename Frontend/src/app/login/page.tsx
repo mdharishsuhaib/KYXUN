@@ -214,7 +214,7 @@ function LoginContent() {
               <button
                 type="button"
                 onClick={() => googleLoginHandler()}
-                className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-[var(--kyxun-border)] bg-transparent hover:bg-[var(--kyxun-surface-hover)] transition-all font-semibold text-sm"
+                className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-[var(--kyxun-border)] bg-transparent hover:bg-[var(--kyxun-surface-hover)] transition-all font-semibold text-sm cursor-pointer"
                 style={{ color: "var(--kyxun-text)" }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24">
