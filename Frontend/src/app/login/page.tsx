@@ -211,7 +211,7 @@ function LoginContent() {
                 onError={() => {
                   setError("Google Sign-In failed.");
                 }}
-                useOneTap
+                text="signin_with"
                 width="340"
               />
             </div>
