@@ -9,7 +9,10 @@
 	],
 	"assets": {
 		"directory": ".open-next/assets",
-		"binding": "ASSETS"
+		"binding": "ASSETS",
+		"headers": {
+			"Cross-Origin-Opener-Policy": "same-origin-allow-popups"
+		}
 	},
 	"services": [
 		{
