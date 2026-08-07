@@ -1,0 +1,55 @@
+services:
+  # PostgreSQL Database
+  - type: psql
+    name: kyxun-db
+    plan: free
+    region: oregon
+    databaseName: kyxun_db
+    user: kyxun_user
+
+  # Redis Cache
+  - type: redis
+    name: kyxun-redis
+    plan: free
+    region: oregon
+
+  # Spring Boot Backend Web Service
+  - type: web
+    name: kyxun-backend
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Backend/Dockerfile
+    dockerContext: ./Backend
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: kyxun-db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: kyxun-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: kyxun-db
+          property: password
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: kyxun-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: kyxun-redis
+          property: port
+      - key: JWT_SECRET
+        generateValue: true
+      - key: VERTEX_PROJECT_ID
+        sync: false
+      - key: VERTEX_LOCATION
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
