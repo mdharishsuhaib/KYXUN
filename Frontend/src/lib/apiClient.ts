@@ -19,9 +19,10 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
 
-  // Attach token if available
+  // Attach token if available — but NOT for public auth endpoints
+  const isAuthEndpoint = endpoint.startsWith("/auth/");
   const session = getSession();
-  if (session && session.accessToken) {
+  if (session && session.accessToken && !isAuthEndpoint) {
     headers.set("Authorization", `Bearer ${session.accessToken}`);
   }
 
