@@ -121,20 +121,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Transactional
     public AuthenticationResponse googleLogin(com.kyxun.authentication.dto.request.GoogleLoginRequest request) {
         try {
-            com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier verifier = 
-                new com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.Builder(
-                    new com.google.api.client.http.javanet.NetHttpTransport(),
-                    new com.google.api.client.json.gson.GsonFactory())
-                .setAudience(java.util.Collections.singletonList(googleClientId))
-                .build();
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setBearerAuth(request.getAccessToken());
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>("", headers);
+            
+            org.springframework.http.ResponseEntity<java.util.Map> response = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v3/userinfo", 
+                org.springframework.http.HttpMethod.GET, 
+                entity, 
+                java.util.Map.class
+            );
 
-            com.google.api.client.googleapis.auth.oauth2.GoogleIdToken idToken = verifier.verify(request.getIdToken());
-            if (idToken == null) {
-                throw new UnauthorizedException("Invalid Google ID token");
+            java.util.Map<String, Object> payload = response.getBody();
+            if (payload == null || !payload.containsKey("email")) {
+                throw new UnauthorizedException("Invalid Google access token");
             }
 
-            com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload payload = idToken.getPayload();
-            String email = payload.getEmail();
+            String email = (String) payload.get("email");
 
             User user = userRepository.findByEmail(email).orElseGet(() -> {
                 User newUser = User.builder()

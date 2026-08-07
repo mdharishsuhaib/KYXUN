@@ -88,7 +88,7 @@ export async function loginUser(
 export async function signInWithGoogle(credential: string): Promise<{ ok: boolean; session?: Session; error?: string }> {
   try {
     const response = await api.post<any>("/auth/google", {
-      idToken: credential,
+      accessToken: credential,
     });
 
     const newSession: Session = {
