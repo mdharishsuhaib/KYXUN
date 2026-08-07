@@ -212,6 +212,7 @@ function LoginContent() {
                   setError("Google Sign-In failed.");
                 }}
                 useOneTap
+                width="340"
               />
             </div>
 

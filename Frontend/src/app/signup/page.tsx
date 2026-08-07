@@ -200,6 +200,7 @@ export default function SignupPage() {
                   setError("Google Sign-Up failed.");
                 }}
                 useOneTap
+                width="340"
               />
             </div>
 
