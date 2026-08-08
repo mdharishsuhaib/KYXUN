@@ -38,8 +38,7 @@ export default function SignupPage() {
     },
     onError: () => {
       setError("Google Sign-Up failed.");
-    },
-    ux_mode: "redirect",
+    }
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
