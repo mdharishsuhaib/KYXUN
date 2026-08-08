@@ -1,5 +1,4 @@
-import { getSession, clearSession } from "./auth";
-
+import { supabase } from "./supabase";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 export class ApiError extends Error {
@@ -21,18 +20,18 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
 
   // Attach token if available — but NOT for public auth endpoints
   const isAuthEndpoint = endpoint.startsWith("/auth/");
-  const session = getSession();
-  if (session && session.accessToken && !isAuthEndpoint) {
-    headers.set("Authorization", `Bearer ${session.accessToken}`);
+  
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (session && session.access_token && !isAuthEndpoint) {
+    headers.set("Authorization", `Bearer ${session.access_token}`);
   }
 
   const response = await fetch(url, { ...options, headers });
 
   if (response.status === 401 || response.status === 403) {
-    // Handle token refresh logic here if needed
-    // For now, clear session and force login if unauthorized
     if (session) {
-      clearSession();
+      await supabase.auth.signOut();
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }

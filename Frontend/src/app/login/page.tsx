@@ -8,12 +8,7 @@ import { Eye, EyeOff, BrainCircuit, Sun, Moon, ArrowLeft, Mail } from "lucide-re
 import { loginUser, saveSession, requestPasswordReset } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { validateEmail, validatePassword } from "@/lib/validation";
-import dynamic from "next/dynamic";
-
-const GoogleLogin = dynamic(() => import("@react-oauth/google").then((mod) => mod.GoogleLogin), {
-  ssr: false,
-});
-
+import { supabase } from "@/lib/supabase";
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -199,27 +194,29 @@ function LoginContent() {
             </div>
 
             <div className="flex justify-center mt-4">
-              <GoogleLogin
-                onSuccess={async (credentialResponse) => {
+              <button
+                type="button"
+                onClick={async () => {
                   setError("");
                   setLoading(true);
-                  const { signInWithGoogle } = await import("@/lib/auth");
-                  const result = await signInWithGoogle(credentialResponse.credential as string);
-                  setLoading(false);
-                  if (!result.ok) {
-                    setError(result.error || "Google Sign-In failed.");
-                  } else {
-                    router.push("/dashboard");
+                  const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                      redirectTo: `${window.location.origin}/auth/callback`
+                    }
+                  });
+                  if (error) {
+                    setLoading(false);
+                    setError(error.message);
                   }
                 }}
-                onError={() => setError("Google Sign-In failed.")}
-                useOneTap
-                theme={isDark ? "filled_black" : "outline"}
-                shape="rectangular"
-              />
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[var(--kyxun-border)] bg-[var(--kyxun-surface)] hover:bg-[var(--kyxun-border)] transition-colors cursor-pointer"
+              >
+                <img src="https://authjs.dev/img/providers/google.svg" alt="Google" className="w-5 h-5" />
+                <span className="font-semibold kyxun-text text-sm">Continue with Google</span>
+              </button>
             </div>
-
-
             <p className="text-center text-sm kyxun-text-muted mt-6">
               Don&apos;t have an account?{" "}
               <Link href="/signup" className="font-semibold" style={{ color: "var(--kyxun-accent)" }}>

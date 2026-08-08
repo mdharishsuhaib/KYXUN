@@ -1,4 +1,5 @@
 import { api } from "./apiClient";
+import { supabase } from "./supabase";
 
 export interface Session {
   email: string;
@@ -36,28 +37,32 @@ export async function registerUser(
   password: string
 ): Promise<{ ok: boolean; session?: Session; needsEmailConfirmation?: boolean; error?: string }> {
   try {
-    const names = fullName.split(" ");
-    const firstName = names[0] || "";
-    const lastName = names.slice(1).join(" ") || " ";
-
-    const response = await api.post<any>("/auth/register", {
+    const { data, error } = await supabase.auth.signUp({
       email,
-      firstName,
-      lastName,
       password,
+      options: {
+        data: {
+          full_name: fullName,
+        }
+      }
     });
 
-    const newSession: Session = {
-      email: response.email,
-      fullName: `${response.firstName} ${response.lastName}`.trim(),
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
-    };
-    saveSession(newSession);
+    if (error) throw error;
 
-    return { ok: true, session: newSession };
+    if (data.session) {
+      const newSession: Session = {
+        email: data.user!.email!,
+        fullName: fullName,
+        accessToken: data.session.access_token,
+        refreshToken: data.session.refresh_token,
+      };
+      saveSession(newSession);
+      return { ok: true, session: newSession };
+    } else {
+      return { ok: true, needsEmailConfirmation: true };
+    }
   } catch (err: any) {
-    return { ok: false, error: err.message || "An unexpected error occurred." };
+    return { ok: false, error: err.message || "Registration failed." };
   }
 }
 
@@ -66,16 +71,18 @@ export async function loginUser(
   password: string
 ): Promise<{ ok: boolean; session?: Session; error?: string }> {
   try {
-    const response = await api.post<any>("/auth/login", {
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    if (error) throw error;
+
     const newSession: Session = {
-      email: response.email,
-      fullName: `${response.firstName} ${response.lastName}`.trim(),
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
+      email: data.user!.email!,
+      fullName: data.user?.user_metadata?.full_name || email,
+      accessToken: data.session.access_token,
+      refreshToken: data.session.refresh_token,
     };
     saveSession(newSession);
 
@@ -158,10 +165,8 @@ export async function updatePassword(
   nonce?: string
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    await api.patch("/users/me/password", {
-      oldPassword: oldPass,
-      newPassword: newPass,
-    });
+    const { error } = await supabase.auth.updateUser({ password: newPass });
+    if (error) throw error;
     return { ok: true };
   } catch (err: any) {
     return { ok: false, error: err.message || "Failed to update password." };
@@ -170,7 +175,10 @@ export async function updatePassword(
 
 export async function requestPasswordReset(email: string): Promise<{ ok: boolean; error?: string }> {
   try {
-    await api.post("/auth/forgot-password", { email });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
     return { ok: true };
   } catch (err: any) {
     return { ok: false, error: err.message || "Failed to send reset email." };
@@ -179,8 +187,8 @@ export async function requestPasswordReset(email: string): Promise<{ ok: boolean
 
 export async function resetPassword(newPass: string, token?: string): Promise<{ ok: boolean; error?: string }> {
   try {
-    if (!token) throw new Error("Missing reset token");
-    await api.post("/auth/reset-password", { token, newPassword: newPass });
+    const { error } = await supabase.auth.updateUser({ password: newPass });
+    if (error) throw error;
     return { ok: true };
   } catch (err: any) {
     return { ok: false, error: err.message || "Failed to reset password." };

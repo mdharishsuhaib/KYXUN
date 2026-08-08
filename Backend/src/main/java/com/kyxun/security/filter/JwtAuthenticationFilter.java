@@ -1,5 +1,8 @@
 package com.kyxun.security.filter;
 
+import com.kyxun.authentication.repository.UserRepository;
+import com.kyxun.common.enums.Role;
+import com.kyxun.entity.User;
 import com.kyxun.security.jwt.JWTService;
 import com.kyxun.security.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final CustomUserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -34,7 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        // Skip JWT processing for public auth endpoints (e.g. /auth/google sends its own Bearer token)
         String requestPath = request.getServletPath();
         if (requestPath.startsWith("/api/v1/auth/")) {
             filterChain.doFilter(request, response);
@@ -52,11 +56,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = null;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(userEmail);
+            } catch (UsernameNotFoundException e) {
+                // Auto-create user if they log in via Supabase but don't exist in Spring DB
+                User newUser = User.builder()
+                        .email(userEmail)
+                        .firstName("Supabase")
+                        .lastName("User")
+                        .password("") // password managed by Supabase
+                        .authProvider("SUPABASE")
+                        .role(Role.STUDENT)
+                        .accountEnabled(true)
+                        .emailVerified(true)
+                        .build();
+                userRepository.save(newUser);
+                userDetails = newUser;
+            }
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
-
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
