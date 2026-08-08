@@ -36,7 +36,8 @@ function LoginContent() {
     },
     onError: () => {
       setError("Google Sign-In failed.");
-    }
+    },
+    ux_mode: "redirect",
   });
 
   useEffect(() => {

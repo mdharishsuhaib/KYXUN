@@ -26,10 +26,10 @@ export default function SignupPage() {
   const googleLoginHandler = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setError("");
-      setGoogleLoading(true);
+      setLoading(true);
       const { signInWithGoogle } = await import("@/lib/auth");
       const result = await signInWithGoogle(tokenResponse.access_token);
-      setGoogleLoading(false);
+      setLoading(false);
       if (!result.ok) {
         setError(result.error || "Google Sign-Up failed.");
       } else {
@@ -38,7 +38,8 @@ export default function SignupPage() {
     },
     onError: () => {
       setError("Google Sign-Up failed.");
-    }
+    },
+    ux_mode: "redirect",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
