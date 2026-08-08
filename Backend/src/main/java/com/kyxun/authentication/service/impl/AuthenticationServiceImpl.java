@@ -122,14 +122,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse googleLogin(com.kyxun.authentication.dto.request.GoogleLoginRequest request) {
         try {
             org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
-            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-            headers.setBearerAuth(request.getAccessToken());
-            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>("", headers);
+            
+            // We use tokeninfo to validate the ID token provided by the GoogleLogin iframe button
+            String url = "https://oauth2.googleapis.com/tokeninfo?id_token=" + request.getAccessToken();
             
             org.springframework.http.ResponseEntity<java.util.Map> response = restTemplate.exchange(
-                "https://www.googleapis.com/oauth2/v3/userinfo", 
+                url, 
                 org.springframework.http.HttpMethod.GET, 
-                entity, 
+                null, 
                 java.util.Map.class
             );
 
