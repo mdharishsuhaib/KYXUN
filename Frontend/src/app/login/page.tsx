@@ -8,7 +8,11 @@ import { Eye, EyeOff, BrainCircuit, Sun, Moon, ArrowLeft, Mail } from "lucide-re
 import { loginUser, saveSession, requestPasswordReset } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { validateEmail, validatePassword } from "@/lib/validation";
-import { GoogleLogin } from "@react-oauth/google";
+import dynamic from "next/dynamic";
+
+const GoogleLogin = dynamic(() => import("@react-oauth/google").then((mod) => mod.GoogleLogin), {
+  ssr: false,
+});
 
 function LoginContent() {
   const router = useRouter();

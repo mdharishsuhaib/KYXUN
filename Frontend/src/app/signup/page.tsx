@@ -8,7 +8,11 @@ import { Eye, EyeOff, BrainCircuit, Sun, Moon, ArrowLeft } from "lucide-react";
 import { registerUser, saveSession } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { validateEmail, validatePassword, validateFullName } from "@/lib/validation";
-import { GoogleLogin } from "@react-oauth/google";
+import dynamic from "next/dynamic";
+
+const GoogleLogin = dynamic(() => import("@react-oauth/google").then((mod) => mod.GoogleLogin), {
+  ssr: false,
+});
 
 export default function SignupPage() {
   const router = useRouter();
