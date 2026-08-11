@@ -71,6 +71,8 @@ function LibraryPageInner() {
       if (!user) { router.replace("/login"); return; }
       if (!alive) return;
       setUserId(user.id);
+      
+      if (alive) setLoading(false);
 
       const [subs, libFiles] = await Promise.allSettled([
         subjectService.getSubjects(user.id),
@@ -80,7 +82,6 @@ function LibraryPageInner() {
       if (!alive) return;
       if (subs.status === "fulfilled") setSubjects(subs.value);
       if (libFiles.status === "fulfilled") setFiles(libFiles.value);
-      setLoading(false);
     };
     init();
     return () => { alive = false; };

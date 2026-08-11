@@ -23,6 +23,8 @@ export default function ProgressPage() {
         return;
       }
       
+      if (alive) setLoading(false);
+      
       try {
         const [chatsRes, plansRes, cardsRes] = await Promise.allSettled([
           supabase.from("chat_sessions").select("created_at", { count: "exact" }).eq("user_id", user.id),
@@ -76,8 +78,6 @@ export default function ProgressPage() {
 
       } catch (err) {
         console.warn("Failed to load progress data:", err);
-      } finally {
-        if (alive) setLoading(false);
       }
     };
     init();

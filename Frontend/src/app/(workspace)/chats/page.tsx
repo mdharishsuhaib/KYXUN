@@ -37,6 +37,8 @@ export default function ChatsPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.replace("/login"); return; }
       if (!alive) return;
+      
+      if (alive) setLoading(false);
 
       const [sessRes, subRes] = await Promise.allSettled([
         chatService.getChatSessions(user.id),
@@ -47,7 +49,6 @@ export default function ChatsPage() {
       if (sessRes.status === "fulfilled") setSessions(sessRes.value);
       if (subRes.status === "fulfilled") setSubjects(subRes.value);
       setGroupingTime(Date.now());
-      setLoading(false);
     };
     init();
     return () => { alive = false; };
