@@ -132,8 +132,14 @@ export async function updateProfile(
     
     // Also update Supabase metadata so dashboard etc get the new name
     const supabaseData: any = {};
-    if (updates.fullName) supabaseData.full_name = updates.fullName;
-    if (updates.photo) supabaseData.avatar_url = updates.photo;
+    if (updates.fullName) {
+      supabaseData.full_name = updates.fullName;
+      supabaseData.name = updates.fullName;
+    }
+    if (updates.photo) {
+      supabaseData.avatar_url = updates.photo;
+      supabaseData.picture = updates.photo;
+    }
     if (Object.keys(supabaseData).length > 0) {
       await supabase.auth.updateUser({ data: supabaseData });
     }
