@@ -20,7 +20,11 @@ export default function GlobalHeader() {
   const [modal, setModal] = useState<ModalType>(null);
 
   useEffect(() => {
-    setSession(getSession());
+    const loadSession = () => setSession(getSession());
+    loadSession();
+
+    window.addEventListener("kyxun_session_updated", loadSession);
+    return () => window.removeEventListener("kyxun_session_updated", loadSession);
   }, []);
 
   const handleLogout = async () => {

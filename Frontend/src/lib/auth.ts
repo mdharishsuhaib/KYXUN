@@ -24,6 +24,7 @@ export function getSession(): Session | null {
 export function saveSession(session: Session): void {
   if (typeof window === "undefined") return;
   localStorage.setItem("kyxun_session", JSON.stringify(session));
+  window.dispatchEvent(new Event("kyxun_session_updated"));
 }
 
 export function clearSession(): void {
@@ -128,6 +129,14 @@ export async function updateProfile(
     }
 
     const response = await api.put<any>("/users/me", body);
+    
+    // Also update Supabase metadata so dashboard etc get the new name
+    const supabaseData: any = {};
+    if (updates.fullName) supabaseData.full_name = updates.fullName;
+    if (updates.photo) supabaseData.avatar_url = updates.photo;
+    if (Object.keys(supabaseData).length > 0) {
+      await supabase.auth.updateUser({ data: supabaseData });
+    }
 
     const session = getSession();
     if (session) {

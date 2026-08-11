@@ -46,7 +46,6 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/plan",      icon: Calendar,          label: "Study Plans" },
   { href: "/chats",     icon: MessageSquare,     label: "AI Chats" },
   { href: "/progress",  icon: BarChart3,          label: "Progress" },
-  { href: "/settings",  icon: Settings,           label: "Settings" },
 ];
 
 function getInitials(name: string) {

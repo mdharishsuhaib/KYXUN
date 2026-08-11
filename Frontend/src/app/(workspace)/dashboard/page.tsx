@@ -100,7 +100,24 @@ export default function DashboardPage() {
 
     };
     init();
-    return () => { alive = false; };
+
+    const handleSessionUpdate = () => {
+      const sessionString = localStorage.getItem("kyxun_session");
+      if (sessionString) {
+        try {
+          const session = JSON.parse(sessionString);
+          if (session.fullName) {
+            setUser(prev => prev ? { ...prev, name: session.fullName.split(" ")[0] } : null);
+          }
+        } catch { /* ignore */ }
+      }
+    };
+    window.addEventListener("kyxun_session_updated", handleSessionUpdate);
+
+    return () => { 
+      alive = false; 
+      window.removeEventListener("kyxun_session_updated", handleSessionUpdate);
+    };
   }, [router]);
 
   const statCards = [
