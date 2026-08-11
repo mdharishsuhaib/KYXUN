@@ -15,9 +15,38 @@ type Tab = "billing" | "notifications" | "security" | "privacy";
 
 export default function SettingsModal({ open, email, onClose }: Props) {
   const [tab, setTab] = useState<Tab>("billing");
-  const [dataAI, setDataAI] = useState(true);
-  const [emailUpdates, setEmailUpdates] = useState(false);
-  const [analytics, setAnalytics] = useState(true);
+  
+  // Persist settings in localStorage
+  const [dataAI, setDataAI] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("kyxun_settings_dataAI");
+      if (saved !== null) return saved === "true";
+    }
+    return true;
+  });
+  const [emailUpdates, setEmailUpdates] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("kyxun_settings_emailUpdates");
+      if (saved !== null) return saved === "true";
+    }
+    return false;
+  });
+  const [analytics, setAnalytics] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("kyxun_settings_analytics");
+      if (saved !== null) return saved === "true";
+    }
+    return true;
+  });
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("kyxun_settings_dataAI", String(dataAI));
+      localStorage.setItem("kyxun_settings_emailUpdates", String(emailUpdates));
+      localStorage.setItem("kyxun_settings_analytics", String(analytics));
+    }
+  }, [dataAI, emailUpdates, analytics]);
+
   const { theme, toggleTheme } = useTheme();
 
   const [oldPass, setOldPass] = useState("");

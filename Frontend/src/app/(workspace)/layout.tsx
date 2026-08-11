@@ -1,10 +1,11 @@
-import Sidebar from "@/components/workspace/ClientSidebarWrapper";
+import ClientSidebarWrapper from "@/components/workspace/ClientSidebarWrapper";
 import GlobalHeader from "@/components/GlobalHeader";
+import NavigationLoader from "@/components/NavigationLoader";
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen kyxun-page">
-      <Sidebar />
+      <ClientSidebarWrapper />
       {/* Content area shifts right based on sidebar width CSS custom property */}
       <div
         className="flex-1 min-w-0 transition-all duration-300 ease-in-out flex flex-col ml-0 lg:ml-[var(--sidebar-w,260px)]"
@@ -15,8 +16,10 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 w-full">
-          {children}
+        <div className="flex-1 w-full relative">
+          <NavigationLoader>
+            {children}
+          </NavigationLoader>
         </div>
       </div>
     </div>
