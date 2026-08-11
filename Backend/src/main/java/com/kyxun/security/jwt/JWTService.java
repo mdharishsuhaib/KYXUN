@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 @Service
 public class JWTService {
@@ -23,9 +24,16 @@ public class JWTService {
     @Value("${supabase.anon.key:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyYmx5YWZqcG9teGp6emJ2ZG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5OTY4NTYsImV4cCI6MjA5ODU3Mjg1Nn0.E7OIXVf2BuwYNWQFPIb6CqVY_xrGE5Av4vtFwkfVbdQ}")
     private String supabaseAnonKey;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<String, String> tokenCache = new ConcurrentHashMap<>();
+
+    public JWTService() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000); // 5 seconds
+        factory.setReadTimeout(5000);    // 5 seconds
+        this.restTemplate = new RestTemplate(factory);
+    }
 
     public String extractUsername(String token) {
         try {

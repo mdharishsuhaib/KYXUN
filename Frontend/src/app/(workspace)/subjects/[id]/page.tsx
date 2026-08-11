@@ -55,6 +55,8 @@ export default function SubjectWorkspacePage({ params }: { params: Promise<{ id:
         if (!alive) return;
         setSubject(sub);
         
+        if (alive) setLoading(false);
+
         try {
           await subjectService.updateLastOpened(subjectId);
         } catch (e) {
@@ -72,11 +74,9 @@ export default function SubjectWorkspacePage({ params }: { params: Promise<{ id:
           if (filesRes.status === "fulfilled") setFiles(filesRes.value);
           if (plansRes.status === "fulfilled") setPlans(plansRes.value);
           if (chatsRes.status === "fulfilled") setChats(chatsRes.value);
-          setLoading(false);
         }
       } catch (err) {
         console.error("Init failed:", err);
-        if (alive) setLoading(false);
       }
     };
     init();

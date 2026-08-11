@@ -51,11 +51,13 @@ function SubjectsPageInner() {
       if (!user) { router.replace("/login"); return; }
       if (!alive) return;
       setUserId(user.id);
+      
+      if (alive) setLoading(false);
+
       try {
         const subs = await subjectService.getSubjects(user.id);
         if (alive) setSubjects(subs);
       } catch { /* ignore */ }
-      if (alive) setLoading(false);
     };
     init();
     return () => { alive = false; };

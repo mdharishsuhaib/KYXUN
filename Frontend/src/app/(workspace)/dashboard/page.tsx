@@ -55,6 +55,8 @@ export default function DashboardPage() {
 
       const name = u.user_metadata?.full_name || u.user_metadata?.name || u.email || "Student";
       setUser({ name: name.split(" ")[0], id: u.id });
+      
+      if (alive) setLoading(false);
 
       // Load subjects
       try {
@@ -96,7 +98,6 @@ export default function DashboardPage() {
         if (alive) setActivity(acts.slice(0, 5));
       } catch { /* ignore */ }
 
-      if (alive) setLoading(false);
     };
     init();
     return () => { alive = false; };
