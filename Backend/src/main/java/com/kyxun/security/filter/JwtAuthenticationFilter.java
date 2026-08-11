@@ -60,19 +60,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = userDetailsService.loadUserByUsername(userEmail);
             } catch (UsernameNotFoundException e) {
-                // Auto-create user if they log in via Supabase but don't exist in Spring DB
-                User newUser = User.builder()
-                        .email(userEmail)
-                        .firstName("Supabase")
-                        .lastName("User")
-                        .password("") // password managed by Supabase
-                        .authProvider("SUPABASE")
-                        .role(Role.STUDENT)
-                        .accountEnabled(true)
-                        .emailVerified(true)
-                        .build();
-                userRepository.save(newUser);
-                userDetails = newUser;
+                // Synchronize on the interned string to prevent DB race conditions on parallel initial requests
+                synchronized (userEmail.intern()) {
+                    try {
+                        // Check again in case another thread just created the user
+                        userDetails = userDetailsService.loadUserByUsername(userEmail);
+                    } catch (UsernameNotFoundException ex) {
+                        // Auto-create user if they log in via Supabase but don't exist in Spring DB
+                        User newUser = User.builder()
+                                .email(userEmail)
+                                .firstName("Supabase")
+                                .lastName("User")
+                                .password("") // password managed by Supabase
+                                .authProvider("SUPABASE")
+                                .role(Role.STUDENT)
+                                .accountEnabled(true)
+                                .emailVerified(true)
+                                .build();
+                        userRepository.save(newUser);
+                        userDetails = newUser;
+                    }
+                }
             }
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
